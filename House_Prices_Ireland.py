@@ -43,7 +43,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib.pylab as pylab
 params = {'legend.fontsize': 'x-large',
-          'figure.figsize': (15, 10),
+          'figure.figsize': (12, 8),
          'axes.labelsize': 'large',
          'axes.titlesize':'large',
          'xtick.labelsize':'large',
@@ -83,6 +83,24 @@ price_change_ratio_of_counties.columns = ['Price_change_ratio_from_2010_to_2021'
 price_change_ratio_of_counties = price_change_ratio_of_counties.sort_values(by ='Price_change_ratio_from_2010_to_2021' )
 price_change_ratio_of_counties.plot(kind = 'bar',yticks = np.arange(-5,65,5))
 plt.title('Average price change ratio of properties from 2010 to 2021')
+
+"""PRICE CHANGES FROM YEAR TO YEAR FOR EACH COUNTRY"""
+data['SALE_DATE'] = data['SALE_DATE'].dt.year
+def price_changes(df,county):
+    dfs = df[df['COUNTY'] == county]
+    sale_price = dfs.groupby('SALE_DATE').mean()
+    sale_price = sale_price['SALE_PRICE']
+    print(sale_price)
+    title = 'Avg. Property Price changes of',county.upper(),'between 2010 t0 2021'
+    sale_price.plot(kind = 'line',figsize = (5,5) ,xticks = np.arange(2010,2022,1))
+    plt.xticks(rotation = 50)
+    plt.title(title)
+    plt.show()
+county_list = data['COUNTY'].unique()
+print(county_list)
+for county in county_list:
+    fig, ax = plt.subplots()
+    price_changes(df = data,county = county)
 
 
 
