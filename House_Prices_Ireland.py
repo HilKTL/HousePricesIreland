@@ -102,6 +102,29 @@ for county in county_list:
     fig, ax = plt.subplots()
     price_changes(df = data,county = county)
 
+"""Average and maximum price and number of houses sold in different neighborhoods of a county in 2021"""
+data['ADDRESS'] = [x.split(',')  for x in data['ADDRESS']]
+data['Town'] = [x[1].upper().strip() for x in data['ADDRESS']]
+print(data['Town'])
+data['STREET'] = [x[0].upper().strip() for x in data['ADDRESS']]
+print(data['STREET'])
+#defining a function for getting avg.,max price and number of house sold in 2021
+def median_price_address_county(df,county,address):
+    data = df[(df['COUNTY'] == county) & (df['SALE_DATE'] == 2021)]
+    data_median = round(data.groupby(by = 'Town')['SALE_PRICE'].median())
+    data_max = data.groupby(by = 'Town')['SALE_PRICE'].max()
+    data_count = data.groupby(by = 'Town')['SALE_PRICE'].count()
+    x = print('Average Price is : ',data_median[address],'\nMax Price is :',data_max[address],'\nNumber of house sold is : ',data_count[address])
+    return x
+
+"""Average and maximum price and number of houses sold in Ballinagh neighborhoud in Cavan"""
+median_price_address_county(df = data,county = 'Cavan',address = 'BALLINAGH')
+
+"""Average and maximum price and number of houses sold in Portlaoise neighborhoud in Laois"""
+median_price_address_county(df = data,county = 'Laois',address = 'PORTLAOISE')
+
+"""Average and maximum price and number of houses sold in Ballsbridge neighborhoud in Dublin"""
+median_price_address_county(df = data,county = 'Dublin',address = 'BALLSBRIDGE')
 
 
 
